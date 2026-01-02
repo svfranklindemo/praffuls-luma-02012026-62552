@@ -193,6 +193,40 @@ function decorateButtons(main) {
 }
 
 /**
+ * Generates unique IDs for section-level content (default-content-wrapper)
+ * @param {Element} main The main element
+ */
+function generateSectionContentIds(main) {
+  const sections = main.querySelectorAll('.section');
+  sections.forEach((section, sectionIndex) => {
+    // Find all default-content-wrapper elements in this section
+    const defaultWrappers = section.querySelectorAll('.default-content-wrapper');
+    defaultWrappers.forEach((wrapper, wrapperIndex) => {
+      wrapper.setAttribute('data-section-content-index', `${sectionIndex}_${wrapperIndex}`);
+      
+      // Add IDs to text elements
+      ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol'].forEach((tag) => {
+        const elements = wrapper.querySelectorAll(tag);
+        elements.forEach((el, elIndex) => {
+          // Skip if already has an ID
+          if (!el.id) {
+            el.id = `section_${sectionIndex}_content_${wrapperIndex}_${tag}_${elIndex}`;
+          }
+        });
+      });
+    });
+    
+    // Add IDs to images at section level (consistent with block pattern)
+    const images = section.querySelectorAll('.default-content-wrapper img');
+    images.forEach((img, imgIndex) => {
+      if (!img.id) {
+        img.id = `section_${sectionIndex}_image_${imgIndex}`;
+      }
+    });
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -205,6 +239,7 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   decorateDMImages(main);
+  generateSectionContentIds(main);
 }
 
 async function renderWBDataLayer() {
