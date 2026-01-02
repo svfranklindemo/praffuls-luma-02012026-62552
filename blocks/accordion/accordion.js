@@ -23,4 +23,32 @@ export default function decorate(block) {
     details.append(summary, body);
     row.replaceWith(details);
   });
+
+  // Add ID generation for accordion blocks
+  const blocks = document.querySelectorAll(`.accordion`);
+  blocks.forEach((block, index) => {
+    block.id = `accordion-${index}`;
+    
+    // Get all accordion items (details elements)
+    const items = block.querySelectorAll('details');
+    items.forEach((item, itemIndex) => {
+      item.setAttribute('data-text-block-index', itemIndex);
+      
+      // Add IDs to text elements within each accordion item
+      ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].forEach((tag) => {
+        const elements = item.querySelectorAll(tag);
+        elements.forEach((el) => {
+          const textBlockElements = item.querySelectorAll(tag);
+          const tagIndex = Array.from(textBlockElements).indexOf(el);
+          el.id = `accordion_${index}_text_${itemIndex}_${tag}_${tagIndex}`;
+        });
+      });
+    });
+
+    // Add IDs to images if any
+    const images = block.querySelectorAll('img');
+    images.forEach((img, imgIndex) => {
+      img.id = `accordion_${index}_image_${imgIndex}`;
+    });
+  });
 }

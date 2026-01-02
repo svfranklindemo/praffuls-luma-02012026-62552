@@ -66,4 +66,18 @@ export default function decorate(block) {
     backgroundStyleDiv.style.display = 'none';
   }
 
+  // Add ID generation for text elements
+  ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol'].forEach((tag) => {
+    const elements = block.querySelectorAll(tag);
+    elements.forEach((el, elIndex) => {
+      el.id = `hero_0_${tag}_${elIndex}`;
+    });
+  });
+
+  // Add IDs to images if any
+  const images = block.querySelectorAll('img');
+  images.forEach((img, imgIndex) => {
+    img.id = `hero_0_image_${imgIndex}`;
+  });
+
 }
